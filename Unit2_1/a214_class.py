@@ -1,22 +1,26 @@
 import tkinter as tk
 import string
 
-
 def handle_login():
-    if len(pass_entry.get()) < 8:
-        error_message.config(text='Please enter at least 8 characters')
+    if is_valid_pass(pass_entry.get()):
+        print('valid')
+        error_message.config(text='')
     else:
-        if not any(char.isdigit() for char in pass_entry.get()):
-            error_message.config(text='Please enter at least one number')
-        elif not any(char.isupper() for char in pass_entry.get()):
-            error_message.config(text='Please enter at least one uppercase letter')
-        elif not any(char.islower() for char in pass_entry.get()):
-            error_message.config(text='Please enter at least lowercase letter')
-        elif not any(char in string.punctuation for char in pass_entry.get()):
-            error_message.config(text='Please enter at least one special character')    
-        else:
-            print('User: ',user_entry.get(), '\nPass: ', pass_entry.get())
-            error_message.config(text='')
+        error_message.config(text='invalid password')
+
+def is_valid_pass(password):
+    if len(password) < 8:
+        return False
+    elif not any(char.isdigit() for char in password):
+        return False
+    elif not any(char.isupper() for char in password):
+        return False
+    elif not any(char.islower() for char in password):
+        return False
+    elif not any(char in string.punctuation for char in password):
+        return False    
+    return True    
+
 
 root = tk.Tk()
 
@@ -41,5 +45,8 @@ error_message.pack()
 
 submit = tk.Button(root, text='Login', command=handle_login)
 submit.pack()
+
+sign_up = tk.Button(root, text='Sign Up')
+sign_up.pack(pady=5)
 
 root.mainloop()
