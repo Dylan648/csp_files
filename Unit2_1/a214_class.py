@@ -1,12 +1,9 @@
 import tkinter as tk
 import string
+from passlib.hash import pbkdf2_sha256
 
 def handle_login():
-    if is_valid_pass(pass_entry.get()):
-        print('valid')
-        error_message.config(text='')
-    else:
-        error_message.config(text='invalid password')
+    pass
 
 def is_valid_pass(password):
     if len(password) < 8:
@@ -21,7 +18,19 @@ def is_valid_pass(password):
         return False    
     return True    
 
+def encrypt_password(password):
+    encrypted_pass = pbkdf2_sha256.hash(password)
 
+def submit_sign_up():
+    if is_valid_pass(pass_entry.get()):
+        users[user_entry.get()] = encrypt_password(pass_entry.get())
+        print(users[user_entry.get()])
+        print('valid')
+        error_message.config(text='')
+    else:
+        error_message.config(text='invalid password')
+
+users = {}
 root = tk.Tk()
 
 root.geometry("800x600")
@@ -37,7 +46,7 @@ user_entry.pack(pady=5)
 
 pass_label = tk.Label(root, text='Password:')
 pass_label.pack()
-pass_entry = tk.Entry(root, show='*')
+pass_entry = tk.Entry(root, show='')
 pass_entry.pack(pady=5)
 
 error_message = tk.Label(root)
@@ -46,7 +55,7 @@ error_message.pack()
 submit = tk.Button(root, text='Login', command=handle_login)
 submit.pack()
 
-sign_up = tk.Button(root, text='Sign Up')
+sign_up = tk.Button(root, text='Sign Up', command=submit_sign_up)
 sign_up.pack(pady=5)
 
 root.mainloop()
