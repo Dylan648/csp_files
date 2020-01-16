@@ -22,11 +22,11 @@ def encrypt_password(password):
     encrypted_pass = pbkdf2_sha256.hash(password)
 
 def submit_sign_up():
-    password = pass_entry.get()
+    password = encrpyt_password(pass_entry.get())#this does not work😐
     if is_valid_pass(password):
-        encrypted_password = encrypt_password(password)
-        users[user_entry.get()] = encrypted_password
+        users[user_entry.get()] = password
         print('valid')
+        print(users[user_entry.get()])
         error_message.config(text='')
     else:
         error_message.config(text='invalid password')
