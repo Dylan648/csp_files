@@ -3,7 +3,14 @@ import string
 from passlib.hash import pbkdf2_sha256
 
 def handle_login():
-    pass
+    user = user_entry.get()
+    if user in users:
+        if pbkdf2_sha256.verify(pass_entry.get(), users[user]):
+            error_message.config(text='You have logged in')
+        else:
+            error_message.config(text='invalid password')
+    else:
+        error_message.config(text='User does not exist, please sign up')
 
 def is_valid_pass(password):
     if len(password) < 8:
@@ -18,18 +25,20 @@ def is_valid_pass(password):
         return False    
     return True    
 
-def encrypt_password(password):
-    encrypted_pass = pbkdf2_sha256.hash(password)
-    return encrypted_pass
-
 def submit_sign_up():
-    password = encrypt_password(pass_entry.get())
-    if is_valid_pass(password):
-        users[user_entry.get()] = password
-        print('valid')
-        error_message.config(text='')
+    user = user_entry.get()
+    if user in users:
+        error_message.config(text='User already exists, please sign in or input a different user name')
     else:
-        error_message.config(text='invalid password')
+        password = pass_entry.get()
+        if is_valid_pass(password):
+            hashed_password = pbkdf2_sha256.hash(password)
+            users[user_entry.get()] = hashed_password
+            print('valid')
+            print(users)
+            error_message.config(text='')
+        else:
+            error_message.config(text='invalid password')
 
 users = {}
 root = tk.Tk()
