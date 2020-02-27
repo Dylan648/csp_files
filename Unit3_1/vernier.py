@@ -1,4 +1,4 @@
-import gdx
+import gdx, matplotlib.pyplot as plt
 
 gdx = gdx.gdx()
 
@@ -20,3 +20,10 @@ print(sound_c)
 
 gdx.stop()
 gdx.close()
+
+#prewrite(no testing available)might not work
+#plots this data on one graph
+ply.plot(len(sound_a), sound_a)#graphs the a sounds
+ply.plot(len(sound_a), sound_c)#graphs the c sounds
+plt.title(label='Vernier')
+plt.show()
