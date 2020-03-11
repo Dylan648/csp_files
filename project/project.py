@@ -21,7 +21,7 @@ def move_enemy():
 def respawn_enemy():
     if obstacle.xcor() == -500:
         obstacle.hideturtle()
-        obstacle.goto(300,0)
+        obstacle.goto(300,-75)
         obstacle.showturtle()
     screen.ontimer(respawn_enemy, 5)
 
@@ -41,7 +41,7 @@ ground.speed(0)
 dino.shapesize(1)
 dino.penup()
 dino.speed(4)
-dino.goto(-150, 0)
+dino.goto(-150, -75)
 dino.left(90)
 
 ground.penup()
@@ -57,7 +57,7 @@ counter.write('Score = ', align='left', font=('Ariel', 20, 'normal'))
 counter.forward(100)
 counter.write(score, align='right', font=('Ariel', 20, 'normal'))
 obstacle.penup()
-obstacle.goto(300,0)
+obstacle.goto(300,-75)
 
 screen.onkeypress(handle_jump, 'space')
 move_enemy()
