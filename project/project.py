@@ -1,15 +1,25 @@
 import turtle, tkinter as tk, random
+import gdx
 
+gdx = gdx.gdx()
 screen = turtle.Screen()
 game_over = False
 jump = False
 score = 0
 game_over = False
 
+gdx.open_usb()
+gdx.select_sensors([1])
+gdx.start(period=100)
+
 def handle_jump():
-    dino.forward(220)
-    dino.back(220)
-    jump = True
+    global jump
+    measure = gdx.read()
+    if not jump and measure[-1] >= 70:
+        dino.forward(220)
+        dino.back(220)
+        jump = True
+    screen.ontimer(handle_jump, 15)
 
 def move_enemy():
     if jump:
@@ -20,6 +30,10 @@ def move_enemy():
         screen.ontimer(move_enemy, 5)
     else:
         obstacle.back(5)
+
+def animate():
+    global dino_dy
+    dino.up(dino_dy)
 
 def respawn_enemy():
     if obstacle.xcor() == -500:
@@ -64,7 +78,7 @@ def restart():
         start_game()
 
 def start_game():
-    screen.onkeypress(handle_jump, 'space')
+    handle_jump()
     move_enemy()
     respawn_enemy()
     check_collision()
@@ -101,6 +115,8 @@ dino.penup()
 dino.speed(4)
 dino.goto(-150, -75)
 dino.left(90)
+dino_dy = 10
+gravity = .2
 
 ground.penup()
 ground.goto(-600,-100)
