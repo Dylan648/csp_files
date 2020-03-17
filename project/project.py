@@ -12,13 +12,17 @@ gdx.open_usb()
 gdx.select_sensors([1])
 gdx.start(period=100)
 
+def read_data():
+    return gdx.read()
+    screen.ontimer(read_data, 100)
+
 def handle_jump():
-    global jump
-    measure = gdx.read()
+    global jump, dino_dy, measure
     if not jump and measure[-1] >= 70:
         jump = True
-        dino_dy = -8
-        animate()
+        print('tyring to jump')
+        dino_dy = 8
+    screen.ontimer(handle_jump, 100)
 
 def move_enemy():
     if jump:
@@ -32,17 +36,17 @@ def move_enemy():
 
 def animate():
     global dino_dy
-    global junp
-    dino.up(dino_dy)
-    dino_dy += gravity
-    if dino.ycor() > 250:
-        dino_dy = 0
-        dino.goto(-150, -75)
-        jump = False
+    global jump
+    print('animating', dino.ycor(), '\ndy', dino_dy)
     if jump:
-        screen.ontimer(animate, 10)
-        
-
+        dino.forward(dino_dy)
+        dino_dy += gravity
+        if dino.ycor() < -75:
+            dino_dy = 0
+            dino.goto(-150, -75)
+            jump = False
+    
+    screen.ontimer(animate, 10)r
 
 def respawn_enemy():
     if obstacle.xcor() == -500:
@@ -87,6 +91,7 @@ def restart():
         start_game()
 
 def start_game():
+    read_data()
     handle_jump()
     move_enemy()
     respawn_enemy()
@@ -97,6 +102,7 @@ def start_game():
     obstacle.hideturtle()
     obstacle.goto(300,-75)
     obstacle.showturtle()
+    animate()
 
     screen.listen()
     screen.mainloop()
@@ -125,7 +131,7 @@ dino.speed(4)
 dino.goto(-150, -75)
 dino.left(90)
 dino_dy = 0
-gravity = .2
+gravity = -.5
 
 ground.penup()
 ground.goto(-600,-100)
@@ -138,6 +144,7 @@ stationary_score.goto(-100, 250)
 stationary_score.setheading(0)
 stationary_score.write('Score = ', align='left', font=('Ariel', 20, 'normal'))
 
+measure = read_data()
 
 obstacle.penup()
 obstacle.goto(300,-75)
