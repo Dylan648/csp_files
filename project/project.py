@@ -16,10 +16,9 @@ def handle_jump():
     global jump
     measure = gdx.read()
     if not jump and measure[-1] >= 70:
-        dino.forward(220)
-        dino.back(220)
         jump = True
-    screen.ontimer(handle_jump, 15)
+        dino_dy = -8
+        animate()
 
 def move_enemy():
     if jump:
@@ -33,7 +32,17 @@ def move_enemy():
 
 def animate():
     global dino_dy
+    global junp
     dino.up(dino_dy)
+    dino_dy += gravity
+    if dino.ycor() > 250:
+        dino_dy = 0
+        dino.goto(-150, -75)
+        jump = False
+    if jump:
+        screen.ontimer(animate, 10)
+        
+
 
 def respawn_enemy():
     if obstacle.xcor() == -500:
@@ -115,7 +124,7 @@ dino.penup()
 dino.speed(4)
 dino.goto(-150, -75)
 dino.left(90)
-dino_dy = 10
+dino_dy = 0
 gravity = .2
 
 ground.penup()
